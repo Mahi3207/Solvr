@@ -159,7 +159,7 @@ git push origin feature/AmazingFeature
 
 Detailed project documentation:
 
-- [Requirements](docs/requirements.md)
+- [Requirements](docs/Requirements.md)
 - [Architecture](docs/architecture.md)
 - [Database Design](docs/database-design.md)
 - [API Design](docs/api-design.md)
