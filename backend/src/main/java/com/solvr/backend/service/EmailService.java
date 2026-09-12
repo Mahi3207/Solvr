@@ -1,37 +1,36 @@
 package com.solvr.backend.service;
-
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+ 
+import com.resend.Resend;
+import com.resend.services.emails.model.CreateEmailOptions;
+import com.resend.services.emails.model.CreateEmailResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+ 
 @Service
 public class EmailService {
-
-    private final JavaMailSender mailSender;
-
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+ 
+    private final Resend resend;
+ 
+    public EmailService(@Value("${resend.api-key}") String apiKey) {
+        this.resend = new Resend(apiKey);
     }
-
+ 
     public void sendEmail(
             String to,
             String subject,
             String body) {
-
+ 
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(body, true);
-
-            mailSender.send(message);
-
-        } catch (MessagingException e) {
+            CreateEmailOptions params = CreateEmailOptions.builder()
+                    .from("onboarding@resend.dev")
+                    .to(to)
+                    .subject(subject)
+                    .html(body)
+                    .build();
+ 
+            CreateEmailResponse response = resend.emails().send(params);
+ 
+        } catch (Exception e) {
             throw new RuntimeException("Failed to send email", e);
         }
     }
