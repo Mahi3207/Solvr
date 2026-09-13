@@ -31,7 +31,9 @@ public class EmailService {
             CreateEmailResponse response = resend.emails().send(params);
  
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send email", e);
+            System.out.println("RESEND ERROR: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to send email: " + e.getMessage(), e);
         }
     }
 }
