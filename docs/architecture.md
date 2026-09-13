@@ -725,32 +725,41 @@ API responses use the common structure:
 
 # 21. Deployment Architecture
 
-A typical production deployment can be:
-
 ```text
 User Browser
      │
      ▼
-Frontend Hosting
+Vercel (Frontend Hosting)
      │
      │ HTTPS API Requests
      ▼
-Spring Boot Backend
+Render (Spring Boot Backend)
      │
-     ├──────────────► PostgreSQL
+     ├──────────────► Neon (PostgreSQL)
      │
-     └──────────────► Gmail SMTP
+     └──────────────► Brevo (Email API)
 ```
 
-Production configuration should provide:
+- **Frontend:** Deployed on Vercel as a static Vite build. Since the app uses client-side routing, a `vercel.json` rewrite is required so direct links (e.g. password reset URLs) resolve correctly instead of returning a 404.
 
-- Database credentials
-- JWT secret
-- Mail credentials
-- Frontend URL
-- Production API URL
+- **Backend:** Deployed on Render via Docker. The free tier spins down after inactivity, so the first request afterward can take up to ~50 seconds.
 
-through environment variables/configuration rather than source code.
+- **Database:** PostgreSQL is provisioned through Neon.
+
+- **Email:** Password reset emails are sent via Brevo's HTTP API rather than SMTP, since Render blocks outbound SMTP ports (25/465/587). Only a verified sender email is required, not a custom domain.
+
+Production configuration is supplied via environment variables:
+
+```text
+DB_URL
+DB_USERNAME
+DB_PASSWORD
+JWT_SECRET
+FRONTEND_URL
+BREVO_API_KEY
+BREVO_SENDER_EMAIL
+```
+
 
 ---
 

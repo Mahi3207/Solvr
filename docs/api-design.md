@@ -15,9 +15,8 @@ http://localhost:8080/api
 Production:
 
 ```text
-https://<your-backend-domain>/api
-```
-
+https://solvr-hs99.onrender.com/api
+`
 The frontend communicates with the backend through Axios services.
 
 ---
@@ -145,6 +144,9 @@ Request:
 Creates a password-reset token and sends an email containing a reset link.
 
 The reset link expires after 15 minutes.
+
+> Email delivery is handled via Brevo's transactional email API (see architecture.md, Section 21). Sending fails if `BREVO_API_KEY` or `BREVO_SENDER_EMAIL` are not configured.
+
 
 ---
 

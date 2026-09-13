@@ -19,6 +19,9 @@ The database stores:
 
 Learning metrics such as mastery are derived from activity and review data, then the current mastery result is persisted on the user activity record.
 
+> In production, PostgreSQL is provisioned through Neon (managed Postgres) rather than a self-hosted instance. This does not affect schema, relationships, or entity design — only hosting.
+
+
 ---
 
 # 2. Entity Relationship Overview
